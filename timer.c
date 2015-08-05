@@ -39,10 +39,15 @@ static void __delete_list(void) {
   list_delete(timer_list);
 }
 
-static void __hook_delete(void *data) {
+static void __hook_delete(void *const data) {
   if (timer_delete(((t_otimer *)data)->timerid))
     perror("timer_delete");
   free(data);
+}
+
+static int __hook_cmp(void const *const a, void const *const b) {
+  return ((t_otimer *)a)->fptr == ((t_otimer *)b)->fptr
+    && ((t_otimer *)a)->data == ((t_otimer *)b)->data;
 }
 
 int new_timer(void (*fptr)(void *), void *data, const int ms, const int flags) {
@@ -53,6 +58,7 @@ int new_timer(void (*fptr)(void *), void *data, const int ms, const int flags) {
     if (!(timer_list = list_new()))
       return -1;
     timer_list->pop = __hook_delete;
+    timer_list->cmp = __hook_cmp;
     atexit(__delete_list);
   }
   if (!(ot = malloc(sizeof(*ot)))) {
@@ -83,4 +89,12 @@ int new_timer(void (*fptr)(void *), void *data, const int ms, const int flags) {
   if (flags & TIMER_CALL_BEFORE)
     ot->fptr(ot->data);
   return 0;
+}
+
+void delete_timer(void (*fptr)(void *), void *data) {
+  t_otimer ot;
+
+  ot.fptr = fptr;
+  ot.data = data;
+  list_pop_search(timer_list, &ot);
 }
