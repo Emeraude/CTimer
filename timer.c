@@ -63,8 +63,9 @@ int new_timer(void (*fptr)(void *), void *data, const int ms, const int flags) {
   ot->flags = flags;
   ot->fptr = fptr;
   ot->data = data;
-  if (!list_push_back(timer_list, ot))
-    return -1;
+  if (flags & TIMER_SEVERAL)
+    if (!list_push_back(timer_list, ot))
+      return -1;
   memset(&sevp, 0, sizeof(sevp));
   sevp.sigev_notify = SIGEV_THREAD;
   sevp.sigev_value.sival_ptr = ot;
