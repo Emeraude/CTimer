@@ -9,8 +9,8 @@ static void __test(void *data) {
 
 int main(void) {
   if (new_timer(__test, "42", 1000, TIMER_SEVERAL | TIMER_CALL_BEFORE) == -1
-      || new_timer(__test, "84", 2000, 0) == -1)
+      || new_timer(__test, "84", 2000, TIMER_SEVERAL) == -1)
     return 1;
-  sleep(42);
+  sleep(5);
   return 0;
 }
