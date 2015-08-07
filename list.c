@@ -2,7 +2,7 @@
 #include <string.h>
 #include "list.h"
 
-t_list *list_new(void) {
+t_list __attribute__((visibility("hidden"))) *list_new(void) {
   t_list *list;
 
   if (!(list = malloc(sizeof(*list)))) {
@@ -12,7 +12,7 @@ t_list *list_new(void) {
   return memset(list, 0, sizeof(*list));
 }
 
-int list_push_back(t_list *const list, void *const data) {
+int __attribute__((visibility("hidden"))) list_push_back(t_list *const list, void *const data) {
   t_node *node;
 
   if (!(node = malloc(sizeof(*node)))) {
@@ -31,7 +31,7 @@ int list_push_back(t_list *const list, void *const data) {
   return 1;
 }
 
-void list_pop_search(t_list *const list, void *const data) {
+void __attribute__((visibility("hidden"))) list_pop_search(t_list *const list, void *const data) {
   t_node *tmp;
 
   if (!list->cmp) {
@@ -60,7 +60,7 @@ void list_pop_search(t_list *const list, void *const data) {
   }
 }
 
-void list_empty(t_list *const list) {
+void __attribute__((visibility("hidden"))) list_empty(t_list *const list) {
   t_node *tmp = list->head;
 
   while (tmp) {
@@ -74,7 +74,7 @@ void list_empty(t_list *const list) {
   list->len = 0;
 }
 
-void list_delete(t_list *const list) {
+void __attribute__((visibility("hidden"))) list_delete(t_list *const list) {
   list_empty(list);
   free(list);
 }
